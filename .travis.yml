@@ -91,6 +91,16 @@ install:
 after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
+before_script:
+  # Wait for emulator fully-booted and disable animations
+  - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - sleep 30
+  - adb shell input keyevent 82 &
+  - sleep 15
+
 script:
   - ./gradlew check assembleDebug assembleDebugAndroidTest connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
   - .buildscript/firebase_tests.sh
