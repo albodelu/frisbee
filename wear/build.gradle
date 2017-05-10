@@ -30,6 +30,11 @@ android {
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
+        //Lint check cannot handle that there are different versions
+        //TODO: Find how this should be handled
+        //check manually with ./gradlew wear:dependencies
+        disable 'GradleCompatible'
+
     }
 }
 
