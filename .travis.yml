@@ -102,7 +102,7 @@ before_script:
   - sleep 15
 
 script:
-  - ./gradlew check assembleDebug assembleDebugAndroidTest connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - travis_wait 20 ./gradlew check assembleDebug assembleDebugAndroidTest connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
   - .buildscript/firebase_tests.sh
 
 after_script:
