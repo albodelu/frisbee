@@ -99,6 +99,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         ListView list = ButterKnife.findById(v, android.R.id.list);
 
         if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
+            //noinspection RestrictedApi
             View header = getLayoutInflater(null)
                 .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
 
