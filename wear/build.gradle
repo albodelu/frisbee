@@ -27,7 +27,6 @@ android {
     }
 
     lintOptions {
-        abortOnError false
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
