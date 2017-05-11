@@ -29,10 +29,10 @@ android:
 
 matrix:
   include: # More Emulator API levels to build in parallel
-    - env: API=24
+#    - env: API=24
     - env: API=23
     - env: API=22
-    - env: API=21
+    - env: API=19
   allow_failures:
     - env: API=23
     - env: API=22
@@ -110,8 +110,7 @@ before_script:
   - adb shell am start -n no.finn.android_emulator_hacks/no.finn.android_emulator_hacks.HackActivity
 
 script:
-  - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
-  - travis_wait 20 ./gradlew connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - ./gradlew check assembleDebug assembleDebugAndroidTest connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
   - .buildscript/firebase_tests.sh
 
 after_script:
@@ -135,6 +134,8 @@ cache:
     - ${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/
     - $HOME/.m2
     - $HOME/.gradle
+    - $HOME/.cache/ci-support
+
 
 notifications:
   webhooks:
