@@ -92,6 +92,10 @@ after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
 before_script:
+  # Download the emulator support stuff
+  - mkdir -p $HOME/.cache/ci-support
+  - curl -L https://github.com/connectbot/ci-support/archive/master.zip -z $HOME/.cache/ci-support/master.zip -o $HOME/.cache/ci-support/master.zip
+  - unzip -oq $HOME/.cache/ci-support/master.zip -d $HOME
   # Wait for emulator fully-booted and disable animations
   - android-wait-for-emulator
   - adb shell settings put global window_animation_scale 0 &
@@ -100,9 +104,14 @@ before_script:
   - sleep 30
   - adb shell input keyevent 82 &
   - sleep 15
+  # Install our ci-support stuff to make the emulator tests more reliable.
+  - adb install -r $HOME/ci-support-master/apk/android_emulator_hacks.apk
+  - adb shell pm grant no.finn.android_emulator_hacks android.permission.SET_ANIMATION_SCALE
+  - adb shell am start -n no.finn.android_emulator_hacks/no.finn.android_emulator_hacks.HackActivity
 
 script:
-  - travis_wait 20 ./gradlew check assembleDebug assembleDebugAndroidTest connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - travis_wait 20 ./gradlew connectedCheck -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
   - .buildscript/firebase_tests.sh
 
 after_script:
