@@ -183,8 +183,12 @@ dependencies {
     androidTestCompile "com.android.support.test:rules:$rootProject.runnerVersion"
 
     // Espresso UI Testing dependencies.
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion") {
+        exclude group: 'javax.inject'
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion") {
+        exclude group: 'javax.inject'
+    }
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 }
 
