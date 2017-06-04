@@ -6,8 +6,11 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
+import android.view.WindowManager;
 
 import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.rule.AnimationAwareWonderTestRule;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +31,22 @@ public class MainActivityDeepLinkTest {
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class, true, false);
+
+    @Rule
+    public AnimationAwareWonderTestRule animationRule = new AnimationAwareWonderTestRule();
+
+    @Before
+    public void unlockScreen() {
+        final MainActivity activity = activityRule.getActivity();
+        Runnable wakeUpDevice = new Runnable() {
+            public void run() {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        };
+        activity.runOnUiThread(wakeUpDevice);
+    }
 
     @Test
     public void canHandleDevelopersGoogleChapterUri() {

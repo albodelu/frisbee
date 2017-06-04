@@ -18,9 +18,12 @@ package org.gdg.frisbee.android.activity;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.WindowManager;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
+import org.gdg.frisbee.android.rule.AnimationAwareWonderTestRule;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +36,23 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class AboutActivityTest {
     @Rule
-    public ActivityTestRule<AboutActivity> rule = new ActivityTestRule<>(AboutActivity.class);
+    public ActivityTestRule<AboutActivity> activityRule = new ActivityTestRule<>(AboutActivity.class);
+
+    @Rule
+    public AnimationAwareWonderTestRule animationRule = new AnimationAwareWonderTestRule();
+
+    @Before
+    public void unlockScreen() {
+        final AboutActivity activity = activityRule.getActivity();
+        Runnable wakeUpDevice = new Runnable() {
+            public void run() {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        };
+        activity.runOnUiThread(wakeUpDevice);
+    }
 
     @Test
     public void activityStarts() {
