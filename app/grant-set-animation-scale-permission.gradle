@@ -20,7 +20,7 @@ task grantSetAnimationScalePermission(type: Exec, dependsOn: 'installDebug') {
     group = 'verification'
     description = 'Grant SET_ANIMATION_SCALE permission for testing.'
     def saspermission = 'android.permission.SET_ANIMATION_SCALE'
-    commandLine "$adb shell pm grant $android.defaultConfig.applicationId $saspermission".split(' ')
+    commandLine "$adb shell pm grant org.gdg.frisbee.android.debug $saspermission".split(' ')
 }
 
 tasks.whenTaskAdded { task ->
