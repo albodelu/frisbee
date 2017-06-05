@@ -41,19 +41,6 @@ public class NotificationTest {
     public AnimationAwareWonderTestRule animationRule = new AnimationAwareWonderTestRule();
 
     @Before
-    public void unlockScreen() {
-        final MainActivity activity = activityRule.getActivity();
-        Runnable wakeUpDevice = new Runnable() {
-            public void run() {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        };
-        activity.runOnUiThread(wakeUpDevice);
-    }
-
-    @Before
     public void setUp() throws Exception {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }

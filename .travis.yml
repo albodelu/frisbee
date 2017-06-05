@@ -33,7 +33,7 @@ matrix:
     - env: API=24
     - env: API=23
     - env: API=22
-    - env: API=19
+    - env: API=17
   allow_failures:
     - env: API=23
     - env: API=22
